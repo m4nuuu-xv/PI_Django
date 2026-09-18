@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca | Agendamento</title>
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    
+    <head>
+    
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>Biblioteca+ | Agendamento</title>
+    
+  <style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #222;
+}
+
+
+/* ===== CABEÇALHO ===== */
+
+header {
+    position: relative;
+
+    height: 75px;
+    background-color: white;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 60px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+
+/* Nome do sistema */
+
+header h1 {
+    font-size: 24px;
+}
+
+
+/* Menu */
+
+nav {
+    margin-left: auto;
+
+    display: flex;
+    gap: 30px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:hover {
+    color: #777;
+}
+
+
+/* Olá estudante */
+
+header > p {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 15px;
+    color: #555;
+}
+
+
+/* ===== CONTEÚDO ===== */
+
+main {
+    max-width: 1000px;
+    margin: auto;
+}
+
+
+/* ===== TELA INICIAL ===== */
+
+.inicio {
+    min-height: 480px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 80px;
+
+    padding: 70px 30px;
+}
+
+
+/* Texto */
+
+.texto-inicio {
+    max-width: 600px;
+    text-align: center;
+}
+
+.subtitulo {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+
+    color: #666;
+
+    margin-bottom: 15px;
+}
+
+.texto-inicio h2 {
+    font-size: 52px;
+    line-height: 1.1;
+
+    margin-bottom: 20px;
+}
+
+.descricao {
+    font-size: 18px;
+    line-height: 1.6;
+
+    color: #666;
+
+    margin-bottom: 30px;
+}
+
+
+/* ===== BOTÃO ===== */
+
+.botao {
+    display: inline-block;
+
+    padding: 15px 25px;
+
+    background-color: #222;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    font-weight: bold;
+}
+
+.botao:hover {
+    background-color: #444;
+}
+
+
+/* ===== CARD DA SALA ===== */
+
+.card-sala {
+    width: 300px;
+
+    background-color: white;
+
+    padding: 40px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+    text-align: center;
+}
+
+.icone {
+    font-size: 50px;
+
+    margin-bottom: 20px;
+}
+
+.card-sala h3 {
+    margin-bottom: 15px;
+}
+
+.card-sala p {
+    color: #666;
+
+    line-height: 1.5;
+}
+
+
+/* ===== COMO FUNCIONA ===== */
+
+.como-funciona {
+    background-color: white;
+
+    padding: 50px 40px;
+
+    border-radius: 12px;
+
+    margin-bottom: 30px;
+}
+
+.como-funciona > h2 {
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+
+/* Cards */
+
+.cards {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 25px;
+}
+
+.card {
+    flex: 1;
+
+    padding: 25px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+.numero {
+    font-size: 14px;
+
+    font-weight: bold;
+
+    color: #777;
+
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #666;
+
+    line-height: 1.5;
+}
+
+
+/* ===== RODAPÉ ===== */
+
+footer {
+    text-align: center;
+
+    padding: 30px;
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+/* ===== CELULAR ===== */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 0 20px;
+    }
+
+    nav {
+        gap: 15px;
+    }
+
+    header > p {
+        display: none;
+    }
+
+    .inicio {
+        flex-direction: column;
+
+        gap: 40px;
+
+        padding: 50px 20px;
+
+        text-align: center;
+    }
+
+    .card-sala {
+        width: 100%;
+
+        max-width: 350px;
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+
+}
+
+  </style>
+    
+</head>
+<body>
+   
+    <!-- Cabeçalho -->
+    <header>
+
+        <h1>Biblioteca+</h1>
+
+        <nav>
+            <a href="/">Início</a>
+            <a href="#">Salas</a>
+            <a href="#">Minhas reservas</a>
+        </nav>
+
+        <p>Olá, estudante!</p>
+
+    </header>
+
+
+    <!-- Conteúdo principal -->
+    <main>
+
+        <!-- Apresentação -->
+        <section>
+
+            <p>BIBLIOTECA+</p>
+
+            <h2>
+                Seu espaço para estudar.
+            </h2>
+
+            <p>
+                Agende uma sala individual da biblioteca
+                de forma rápida e organizada.
+            </p>
+
+            <a href="#">
+                Agendar uma sala
+            </a>
+
+        </section>
+
+
+        <!-- Informações sobre as salas -->
+        <section>
+
+            <h2>Salas individuais</h2>
+
+            <p>
+                Tenha um espaço reservado para estudar
+                com tranquilidade e concentração.
+            </p>
+
+        </section>
+
+
+        <!-- Como funciona -->
+        <section>
+
+            <h2>Como funciona?</h2>
+
+            <article>
+
+                <h3>01 — Escolha uma sala</h3>
+
+                <p>
+                    Confira as salas disponíveis
+                    para o horário desejado.
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <h3>02 — Escolha o horário</h3>
+
+                <p>
+                    Selecione o dia e o horário
+                    em que deseja estudar.
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <h3>03 — Faça sua reserva</h3>
+
+                <p>
+                    Confirme o agendamento e utilize
+                    a sala no horário escolhido.
+                </p>
+
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <!-- Rodapé -->
+    <footer>
+
+        <p>
+            Biblioteca+ — Sistema de Agendamento de Salas
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
+
+</body>
+</html>
