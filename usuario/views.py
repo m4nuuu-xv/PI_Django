@@ -1,53 +1,125 @@
+
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
 from django.contrib import messages
+from functools import wraps
+
 from .forms import LoginForm
-from .forms import LoginForm, CadastroForm
 
 
+# Verifica se o aluno já informou uma matrícula válida
+def matricula_required(view_func):
+
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+
+        if not request.session.get('matricula'):
+            return redirect('login')
+
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
+
+# Tela de login
 def login_view(request):
-    """
-    View responsável por exibir e processar o formulário de login.
-    - GET: mostra a página de login
-    - POST: valida as credenciais e loga o usuário
-    """
+
+    # Se já estiver na sessão, vai direto para a biblioteca
+    if request.session.get('matricula'):
+        return redirect('home')
+
     if request.method == 'POST':
-        form = LoginForm(request, data=request.POST)
+
+        form = LoginForm(request.POST)
+
         if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            messages.success(request, f'Bem-vindo, {user.username}!')
+
+            matricula = form.cleaned_data['matricula']
+
+            # Guarda a matrícula na sessão
+            request.session['matricula'] = matricula
+
+            messages.success(
+                request,
+                'Acesso realizado com sucesso!'
+            )
+
             return redirect('home')
+
         else:
-            messages.error(request, 'Usuário ou senha inválidos.')
+
+            messages.error(
+                request,
+                'Confira a matrícula e preencha os campos corretamente.'
+            )
+
     else:
-        form = LoginForm(request)
 
-    return render(request, 'usuario/login.html', {'form': form})
+        form = LoginForm()
+
+    return render(
+        request,
+        'usuario/login.html',
+        {'form': form}
+    )
 
 
+# Sair da biblioteca
 def logout_view(request):
-    """Desloga o usuário e redireciona para o login."""
-    logout(request)
-    messages.info(request, 'Você saiu da sua conta.')
+
+    request.session.flush()
+
     return redirect('login')
 
 
+# Página principal da biblioteca
+@matricula_required
 def home(request):
-    """Página inicial simples (por enquanto)."""
-    return render(request, 'home.html')
 
-def cadastro_view(request):
-    if request.method == 'POST':
-        form = CadastroForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Cadastro realizado com sucesso!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Corrija os erros abaixo.')
-    else:
-        form = CadastroForm()
+    matricula = request.session.get('matricula')
 
-    return render(request, 'usuario/cadastro.html', {'form': form})
+    return render(
+        request,
+        'home.html',
+        {'matricula': matricula}
+    )
+
+# Página de agendamento
+@matricula_required
+def agendar(request):
+
+    return render(
+        request,
+        'agendar.html',
+        {
+            'matricula': request.session.get('matricula')
+        }
+    )
+
+
+# Página de favoritos
+@matricula_required
+def favoritos(request):
+
+    return render(
+        request,
+        'favoritos.html',
+        {
+            'matricula': request.session.get('matricula')
+        }
+    )
+
+
+
+# Perfil do aluno
+# Perfil do aluno
+@matricula_required
+def perfil(request):
+
+    return render(
+        request,
+        'perfil.html',
+        {
+            'matricula': request.session.get('matricula')
+        }
+    )
+

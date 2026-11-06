@@ -1,9 +1,598 @@
+
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+
+{% block title %}Minha Biblioteca{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
-    <h1>Bem-vindo, {{ user.username }}! 👋</h1>
-    <p class="text-muted">Sistema de gerenciamento de tarefas</p>
+
+<style>
+    .biblioteca-banner {
+        background: linear-gradient(120deg, #173b35, #286b58);
+        color: white;
+        padding: 45px 35px;
+        border-radius: 15px;
+        margin-bottom: 35px;
+    }
+
+    .livro-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s;
+        height: 100%;
+    }
+
+    .livro-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .capa-livro {
+        height: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .btn-marcar-lido {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.btn-marcar-lido.lido {
+    background-color: #198754;
+    color: white;
+}
+
+    .romance {
+        background: linear-gradient(135deg, #9d4566, #e58b9e);
+    }
+
+    .misterio {
+        background: linear-gradient(135deg, #252d48, #66749c);
+    }
+
+    .fantasia {
+        background: linear-gradient(135deg, #49316d, #a27bc9);
+    }
+
+    .tecnologia {
+        background: linear-gradient(135deg, #185b70, #55a9b9);
+    }
+
+    .titulo-genero {
+        margin-top: 35px;
+        margin-bottom: 18px;
+        font-weight: 700;
+        color: #263b34;
+    }
+
+    .livro-autor {
+        color: #777;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    /* BOTÃO DE FAVORITAR */
+
+    .btn-favoritar {
+        border: none;
+        background: transparent;
+        padding: 3px;
+        cursor: pointer;
+        color: #222;
+        flex-shrink: 0;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .btn-favoritar svg {
+        width: 38px;
+        height: 32px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .btn-favoritar:hover {
+        color: #198754;
+        transform: scale(1.08);
+    }
+
+    .btn-favoritar.favoritado {
+        color: #198754;
+        background: #e8f5ee;
+    }
+
+    .btn-favoritar .marcador {
+        fill: transparent;
+        transition: fill 0.2s;
+    }
+
+    .btn-favoritar.favoritado .marcador {
+        fill: #bce4ce;
+    }
+
+    .titulo-livro {
+        margin-bottom: 0;
+        flex-grow: 1;
+    }
+</style>
+
+<div class="container py-4">
+
+    <!-- BANNER PRINCIPAL -->
+
+    <section class="biblioteca-banner">
+
+        <h1>Bem-vindo à sua biblioteca!</h1>
+
+        <p>
+            Explore novos conhecimentos, descubra histórias
+            e encontre sua próxima leitura.
+        </p>
+
+        <p class="mb-0">
+            Matrícula: <strong>{{ matricula }}</strong>
+        </p>
+
+    </section>
+
+
+    <!-- PESQUISA -->
+
+    <div class="mb-4">
+
+        <input
+            type="text"
+            id="pesquisaLivro"
+            class="form-control form-control-lg"
+            placeholder="Pesquisar livros ou autores..."
+        >
+
+    </div>
+
+
+    <!-- GÊNERO: ROMANCE -->
+
+    <section>
+
+        <h3 class="titulo-genero">Romance</h3>
+
+        <div class="row g-4">
+
+            <!-- ORGULHO E PRECONCEITO -->
+
+            <div class="col-6 col-md-3">
+
+                <div class="card livro-card shadow-sm">
+
+                    <div class="capa-livro romance">
+                        Orgulho e Preconceito
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+
+                            <h6 class="titulo-livro">
+                                Orgulho e Preconceito
+                            </h6>
+
+                            <button
+                                type="button"
+                                class="btn-favoritar"
+                                data-id="orgulho-preconceito"
+                                data-titulo="Orgulho e Preconceito"
+                                data-autor="Jane Austen"
+                                data-genero="Romance"
+                                aria-label="Adicionar aos favoritos"
+                                aria-pressed="false"
+                                title="Adicionar aos favoritos"
+                            >
+                                <svg viewBox="0 0 64 48">
+                                    <path d="M32 9 C22 3 11 4 4 8 V40 C13 36 23 36 32 42 C41 36 51 36 60 40 V8 C53 4 42 3 32 9 Z"/>
+                                    <path d="M32 9 V42"/>
+                                    <path d="M11 11 V34 C18 31 25 32 32 36"/>
+                                    <path d="M53 11 V34 C46 31 39 32 32 36"/>
+                                    <path class="marcador" d="M43 6 V22 L48 17 L53 22 V8 Z"/>
+                                    <path d="M43 6 V22 L48 17 L53 22 V8"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                        <p class="livro-autor">Jane Austen</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- A CULPA É DAS ESTRELAS -->
+
+            <div class="col-6 col-md-3">
+
+                <div class="card livro-card shadow-sm">
+
+                    <div class="capa-livro romance">
+                        A Culpa é das Estrelas
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+
+                            <h6 class="titulo-livro">
+                                A Culpa é das Estrelas
+                            </h6>
+
+                            <button
+                                type="button"
+                                class="btn-favoritar"
+                                data-id="culpa-estrelas"
+                                data-titulo="A Culpa é das Estrelas"
+                                data-autor="John Green"
+                                data-genero="Romance"
+                                aria-label="Adicionar aos favoritos"
+                                aria-pressed="false"
+                                title="Adicionar aos favoritos"
+                            >
+                                <svg viewBox="0 0 64 48">
+                                    <path d="M32 9 C22 3 11 4 4 8 V40 C13 36 23 36 32 42 C41 36 51 36 60 40 V8 C53 4 42 3 32 9 Z"/>
+                                    <path d="M32 9 V42"/>
+                                    <path d="M11 11 V34 C18 31 25 32 32 36"/>
+                                    <path d="M53 11 V34 C46 31 39 32 32 36"/>
+                                    <path class="marcador" d="M43 6 V22 L48 17 L53 22 V8 Z"/>
+                                    <path d="M43 6 V22 L48 17 L53 22 V8"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                        <p class="livro-autor">John Green</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GÊNERO: MISTÉRIO -->
+
+    <section>
+
+        <h3 class="titulo-genero">Mistério e Suspense</h3>
+
+        <div class="row g-4">
+
+            <div class="col-6 col-md-3">
+
+                <div class="card livro-card shadow-sm">
+
+                    <div class="capa-livro misterio">
+                        O Assassinato no Expresso do Oriente
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+
+                            <h6 class="titulo-livro">
+                                O Assassinato no Expresso do Oriente
+                            </h6>
+
+                            <button
+                                type="button"
+                                class="btn-favoritar"
+                                data-id="assassinato-expresso"
+                                data-titulo="O Assassinato no Expresso do Oriente"
+                                data-autor="Agatha Christie"
+                                data-genero="Mistério e Suspense"
+                                aria-label="Adicionar aos favoritos"
+                                aria-pressed="false"
+                                title="Adicionar aos favoritos"
+                            >
+                                <svg viewBox="0 0 64 48">
+                                    <path d="M32 9 C22 3 11 4 4 8 V40 C13 36 23 36 32 42 C41 36 51 36 60 40 V8 C53 4 42 3 32 9 Z"/>
+                                    <path d="M32 9 V42"/>
+                                    <path d="M11 11 V34 C18 31 25 32 32 36"/>
+                                    <path d="M53 11 V34 C46 31 39 32 32 36"/>
+                                    <path class="marcador" d="M43 6 V22 L48 17 L53 22 V8 Z"/>
+                                    <path d="M43 6 V22 L48 17 L53 22 V8"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                        <p class="livro-autor">Agatha Christie</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GÊNERO: FANTASIA -->
+
+    <section>
+
+        <h3 class="titulo-genero">Fantasia</h3>
+
+        <div class="row g-4">
+
+            <div class="col-6 col-md-3">
+
+                <div class="card livro-card shadow-sm">
+
+                    <div class="capa-livro fantasia">
+                        Harry Potter
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+
+                            <h6 class="titulo-livro">
+                                Harry Potter
+                            </h6>
+
+                            <button
+                                type="button"
+                                class="btn-favoritar"
+                                data-id="harry-potter"
+                                data-titulo="Harry Potter"
+                                data-autor="J. K. Rowling"
+                                data-genero="Fantasia"
+                                aria-label="Adicionar aos favoritos"
+                                aria-pressed="false"
+                                title="Adicionar aos favoritos"
+                            >
+                                <svg viewBox="0 0 64 48">
+                                    <path d="M32 9 C22 3 11 4 4 8 V40 C13 36 23 36 32 42 C41 36 51 36 60 40 V8 C53 4 42 3 32 9 Z"/>
+                                    <path d="M32 9 V42"/>
+                                    <path d="M11 11 V34 C18 31 25 32 32 36"/>
+                                    <path d="M53 11 V34 C46 31 39 32 32 36"/>
+                                    <path class="marcador" d="M43 6 V22 L48 17 L53 22 V8 Z"/>
+                                    <path d="M43 6 V22 L48 17 L53 22 V8"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                        <p class="livro-autor">J. K. Rowling</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GÊNERO: TECNOLOGIA -->
+
+    <section>
+
+        <h3 class="titulo-genero">Tecnologia e Conhecimento</h3>
+
+        <div class="row g-4">
+
+            <div class="col-6 col-md-3">
+
+                <div class="card livro-card shadow-sm">
+
+                    <div class="capa-livro tecnologia">
+                        Código Limpo
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+
+                            <h6 class="titulo-livro">
+                                Código Limpo
+                            </h6>
+
+                            <button
+                                type="button"
+                                class="btn-favoritar"
+                                data-id="codigo-limpo"
+                                data-titulo="Código Limpo"
+                                data-autor="Robert C. Martin"
+                                data-genero="Tecnologia e Conhecimento"
+                                aria-label="Adicionar aos favoritos"
+                                aria-pressed="false"
+                                title="Adicionar aos favoritos"
+                            >
+                                <svg viewBox="0 0 64 48">
+                                    <path d="M32 9 C22 3 11 4 4 8 V40 C13 36 23 36 32 42 C41 36 51 36 60 40 V8 C53 4 42 3 32 9 Z"/>
+                                    <path d="M32 9 V42"/>
+                                    <path d="M11 11 V34 C18 31 25 32 32 36"/>
+                                    <path d="M53 11 V34 C46 31 39 32 32 36"/>
+                                    <path class="marcador" d="M43 6 V22 L48 17 L53 22 V8 Z"/>
+                                    <path d="M43 6 V22 L48 17 L53 22 V8"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                        <p class="livro-autor">Robert C. Martin</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </div>
+
+
+<!-- PESQUISA E FAVORITOS -->
+
+<script>
+
+    // IDENTIFICA A MATRÍCULA ATUAL
+
+    const matriculaAtual = "{{ matricula|escapejs }}";
+
+    const chaveFavoritos = "biblioteca_favoritos_" + matriculaAtual;
+
+
+    // RECUPERA OS FAVORITOS SALVOS
+
+    function carregarFavoritos() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(chaveFavoritos)
+            ) || [];
+
+        } catch (erro) {
+
+            return [];
+
+        }
+
+    }
+
+
+    // ATUALIZA O VISUAL DO BOTÃO
+
+    function atualizarBotao(botao) {
+
+        const favoritos = carregarFavoritos();
+
+        const estaFavoritado = favoritos.some(
+            livro => livro.id === botao.dataset.id
+        );
+
+        botao.classList.toggle(
+            'favoritado',
+            estaFavoritado
+        );
+
+        botao.setAttribute(
+            'aria-pressed',
+            estaFavoritado
+        );
+
+        botao.setAttribute(
+            'aria-label',
+            estaFavoritado
+                ? 'Remover dos favoritos'
+                : 'Adicionar aos favoritos'
+        );
+
+        botao.title = estaFavoritado
+            ? 'Remover dos favoritos'
+            : 'Adicionar aos favoritos';
+
+    }
+
+
+    // ATIVA OS BOTÕES DE FAVORITAR
+
+    document.querySelectorAll('.btn-favoritar').forEach(botao => {
+
+        atualizarBotao(botao);
+
+        botao.addEventListener('click', function () {
+
+            let favoritos = carregarFavoritos();
+
+            const id = this.dataset.id;
+
+            const indice = favoritos.findIndex(
+                livro => livro.id === id
+            );
+
+
+            if (indice >= 0) {
+
+                // REMOVE DOS FAVORITOS
+
+                favoritos.splice(indice, 1);
+
+            } else {
+
+                // ADICIONA AOS FAVORITOS
+
+                favoritos.push({
+
+                    id: this.dataset.id,
+
+                    titulo: this.dataset.titulo,
+
+                    autor: this.dataset.autor,
+
+                    genero: this.dataset.genero
+
+                });
+
+            }
+
+
+            // SALVA A LISTA NO NAVEGADOR
+
+            localStorage.setItem(
+                chaveFavoritos,
+                JSON.stringify(favoritos)
+            );
+
+            atualizarBotao(this);
+
+        });
+
+    });
+
+
+    // PESQUISA DE LIVROS
+
+    const pesquisa = document.getElementById('pesquisaLivro');
+
+    pesquisa.addEventListener('input', function () {
+
+        const termo = this.value.toLowerCase();
+
+        document.querySelectorAll('.livro-card').forEach(card => {
+
+            const conteudo = card.textContent.toLowerCase();
+
+            card.closest('.col-6').style.display =
+                conteudo.includes(termo) ? '' : 'none';
+
+        });
+
+    });
+
+</script>
+
 {% endblock %}

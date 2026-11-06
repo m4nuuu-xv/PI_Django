@@ -1,0 +1,84 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <h2 class="mb-4">Meu Perfil</h2>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <h4>Dados do aluno</h4>
+            <p class="mb-0">
+                Matrícula: <strong>{{ matricula }}</strong>
+            </p>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Meu progresso de leitura</h4>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between">
+                <span>Progresso de leitura</span>
+                <strong>{{ progresso }}%</strong>
+            </div>
+
+            <div class="progress mt-2">
+                <div class="progress-bar bg-success"
+                     role="progressbar"
+                     style="width: {{ progresso }}%">
+                </div>
+            </div>
+
+            <p class="text-muted mt-2 mb-0">
+                Continue lendo para avançar no seu progresso!
+            </p>
+
+        </div>
+    </div>
+
+    <h4 class="mb-3">Meus livros</h4>
+
+    <div class="row g-3">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5>Livros lidos</h5>
+                    <h2 class="text-success">{{ livros_lidos }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5>Livros emprestados</h5>
+                    <h2 class="text-primary">
+                        {{ livros_emprestados }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5>Livros atrasados</h5>
+                    <h2 class="text-danger">
+                        {{ livros_atrasados }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,349 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Meus Favoritos{% endblock %}
+
+{% block content %}
+
+<style>
+    .favoritos-header {
+        margin-bottom: 30px;
+    }
+
+    .favoritos-header h2 {
+        color: #263b34;
+        font-weight: 700;
+    }
+
+    .livro-favorito {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        height: 100%;
+        transition: transform 0.2s;
+    }
+
+    .livro-favorito:hover {
+        transform: translateY(-5px);
+    }
+
+    .capa-favorito {
+        height: 170px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        text-align: center;
+        color: white;
+        font-size: 19px;
+        font-weight: bold;
+    }
+
+    .romance {
+        background: linear-gradient(135deg, #9d4566, #e58b9e);
+    }
+
+    .misterio {
+        background: linear-gradient(135deg, #252d48, #66749c);
+    }
+
+    .fantasia {
+        background: linear-gradient(135deg, #49316d, #a27bc9);
+    }
+
+    .tecnologia {
+        background: linear-gradient(135deg, #185b70, #55a9b9);
+    }
+
+    .outro {
+        background: linear-gradient(135deg, #49645b, #8cad9c);
+    }
+
+    .autor-favorito {
+        color: #777;
+        font-size: 14px;
+    }
+
+    .genero-favorito {
+        font-size: 12px;
+        color: #198754;
+        background: #e8f5ee;
+        padding: 5px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .estado-vazio {
+        text-align: center;
+        padding: 55px 20px;
+        background: white;
+        border-radius: 15px;
+        border: 1px solid #eee;
+    }
+
+    .icone-vazio {
+        font-size: 55px;
+        color: #9dada5;
+        margin-bottom: 15px;
+    }
+</style>
+
+
+<div class="container py-4">
+
+    <!-- CABEÇALHO -->
+
+    <div class="favoritos-header">
+
+        <h2>Meus Favoritos</h2>
+
+        <p class="text-muted">
+            Seus livros preferidos ficam reunidos aqui.
+        </p>
+
+        <span class="text-muted">
+            <strong id="quantidadeFavoritos">0</strong>
+            livros favoritados
+        </span>
+
+    </div>
+
+
+    <!-- LISTA DE LIVROS -->
+
+    <div id="listaFavoritos" class="row g-4"></div>
+
+
+    <!-- MENSAGEM QUANDO NÃO HOUVER FAVORITOS -->
+
+    <div id="mensagemVazia" class="estado-vazio" style="display: none;">
+
+        <div class="icone-vazio">
+            ♡
+        </div>
+
+        <h4>Nenhum favorito por enquanto</h4>
+
+        <p class="text-muted">
+            Explore nossa biblioteca e adicione os livros
+            que mais chamarem sua atenção.
+        </p>
+
+        <a href="{% url 'home' %}" class="btn btn-success mt-2">
+            Explorar livros
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // IDENTIFICA A MATRÍCULA DO ALUNO
+
+    const matriculaAtual = "{{ matricula|escapejs }}";
+
+    const chaveFavoritos = "biblioteca_favoritos_" + matriculaAtual;
+
+
+    // ELEMENTOS DA PÁGINA
+
+    const lista = document.getElementById('listaFavoritos');
+
+    const mensagemVazia = document.getElementById('mensagemVazia');
+
+    const quantidade = document.getElementById('quantidadeFavoritos');
+
+
+    // CARREGA OS LIVROS SALVOS
+
+    function carregarFavoritos() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(chaveFavoritos)
+            ) || [];
+
+        } catch (erro) {
+
+            return [];
+
+        }
+
+    }
+
+
+    // IDENTIFICA A COR DA CAPA PELO GÊNERO
+
+    function identificarGenero(genero) {
+
+        const texto = genero.toLowerCase();
+
+        if (texto.includes('romance')) {
+            return 'romance';
+        }
+
+        if (texto.includes('mistério') || texto.includes('suspense')) {
+            return 'misterio';
+        }
+
+        if (texto.includes('fantasia')) {
+            return 'fantasia';
+        }
+
+        if (texto.includes('tecnologia') || texto.includes('conhecimento')) {
+            return 'tecnologia';
+        }
+
+        return 'outro';
+
+    }
+
+
+    // MOSTRA OS LIVROS FAVORITADOS
+
+    function mostrarFavoritos() {
+
+        const favoritos = carregarFavoritos();
+
+        lista.innerHTML = '';
+
+        quantidade.textContent = favoritos.length;
+
+        // VERIFICA SE EXISTEM FAVORITOS
+
+        if (favoritos.length === 0) {
+
+            mensagemVazia.style.display = 'block';
+
+            return;
+
+        }
+
+        mensagemVazia.style.display = 'none';
+
+
+        // CRIA UM CARD PARA CADA LIVRO
+
+        favoritos.forEach(livro => {
+
+            const coluna = document.createElement('div');
+
+            coluna.className = 'col-6 col-md-4 col-lg-3';
+
+
+            const card = document.createElement('div');
+
+            card.className = 'card livro-favorito shadow-sm';
+
+
+            // CAPA DO LIVRO
+
+            const capa = document.createElement('div');
+
+            capa.className = 'capa-favorito ' +
+                identificarGenero(livro.genero);
+
+            capa.textContent = livro.titulo;
+
+
+            // CONTEÚDO DO CARD
+
+            const corpo = document.createElement('div');
+
+            corpo.className = 'card-body';
+
+
+            const titulo = document.createElement('h6');
+
+            titulo.className = 'fw-bold';
+
+            titulo.textContent = livro.titulo;
+
+
+            const autor = document.createElement('p');
+
+            autor.className = 'autor-favorito';
+
+            autor.textContent = livro.autor;
+
+
+            const genero = document.createElement('span');
+
+            genero.className = 'genero-favorito';
+
+            genero.textContent = livro.genero;
+
+
+            // BOTÃO PARA REMOVER DOS FAVORITOS
+
+            const botaoRemover = document.createElement('button');
+
+            botaoRemover.type = 'button';
+
+            botaoRemover.className =
+                'btn btn-outline-danger btn-sm w-100 mt-3';
+
+            botaoRemover.textContent = 'Remover dos favoritos';
+
+
+            botaoRemover.addEventListener('click', function () {
+
+                removerFavorito(livro.id);
+
+            });
+
+
+            // ORGANIZA OS ELEMENTOS
+
+            corpo.appendChild(titulo);
+
+            corpo.appendChild(autor);
+
+            corpo.appendChild(genero);
+
+            corpo.appendChild(botaoRemover);
+
+
+            card.appendChild(capa);
+
+            card.appendChild(corpo);
+
+            coluna.appendChild(card);
+
+            lista.appendChild(coluna);
+
+        });
+
+    }
+
+
+    // REMOVE UM LIVRO DA LISTA
+
+    function removerFavorito(id) {
+
+        let favoritos = carregarFavoritos();
+
+        favoritos = favoritos.filter(
+            livro => livro.id !== id
+        );
+
+        localStorage.setItem(
+            chaveFavoritos,
+            JSON.stringify(favoritos)
+        );
+
+        mostrarFavoritos();
+
+    }
+
+
+    // INICIA A PÁGINA
+
+    mostrarFavoritos();
+
+</script>
+
+{% endblock %}
