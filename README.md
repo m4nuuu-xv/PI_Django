@@ -15,7 +15,7 @@ Organização dos livros por gêneros;
 Página inicial da biblioteca;
 Página de perfil do aluno.
 
-No entanto, nossa principal prioridade neste momento é desenvolver o sistema de agendamento de horários,
+  No entanto, nossa principal prioridade neste momento é desenvolver o sistema de agendamento de horários,
 que precisará de um banco de dados para armazenar e organizar as informações. Além disso, ao longo do desenvolvimento, 
 novas funcionalidades poderão ser adicionadas para ampliar os recursos e melhorar a experiência dos usuários.
 
