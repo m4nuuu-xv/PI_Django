@@ -1,0 +1,445 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do livro{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background-color: #f5f7f5;
+    }
+
+    .pagina-livro {
+        background: white;
+        border-radius: 22px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,.04);
+        margin-bottom: 35px;
+    }
+
+    .capa-detalhes {
+        width: 100%;
+        max-width: 250px;
+        height: 360px;
+        object-fit: contain;
+        background: #f0f3f0;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 8px 22px rgba(0,0,0,.12);
+    }
+
+    .titulo-livro-detalhes {
+        color: #173b35;
+        font-weight: 700;
+        margin-top: 25px;
+    }
+
+    .autor-livro-detalhes {
+        color: #286b58;
+        font-size: 18px;
+        margin-top: 10px;
+    }
+
+    .genero-livro {
+        display: inline-block;
+        background: #e8f1eb;
+        color: #286b58;
+        padding: 7px 15px;
+        border-radius: 25px;
+        font-size: 13px;
+        margin-top: 10px;
+    }
+
+    .informacoes-livro {
+        color: #59675e;
+        margin-top: 25px;
+    }
+
+    .sinopse-livro {
+        color: #4e5d54;
+        line-height: 1.8;
+        font-size: 16px;
+        text-align: justify;
+    }
+
+    .secao-sinopse {
+        margin-top: 30px;
+    }
+
+    .secao-sinopse h4 {
+        color: #173b35;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .btn-emprestar {
+        background-color: #286b58;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 13px;
+        font-weight: 600;
+        width: 100%;
+    }
+
+    .btn-emprestar:disabled {
+        background-color: #286b58;
+        color: white;
+        opacity: .55;
+        cursor: not-allowed;
+    }
+
+    .btn-favorito-detalhes {
+        border-radius: 10px;
+        padding: 12px;
+        width: 100%;
+        transition: .2s;
+    }
+
+    .btn-favorito-detalhes.favoritado {
+        background-color: #fff0f3;
+        color: #c0395b;
+        border-color: #c0395b;
+    }
+
+    .btn-voltar {
+        color: #286b58;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .btn-voltar:hover {
+        color: #173b35;
+    }
+
+    @media (max-width: 768px) {
+        .pagina-livro {
+            padding: 20px;
+        }
+
+        .capa-detalhes {
+            height: 320px;
+        }
+
+        .titulo-livro-detalhes {
+            font-size: 24px;
+        }
+    }
+</style>
+
+<div class="container py-4">
+
+    <a href="{% url 'home' %}" class="btn-voltar">
+        ← Voltar para a biblioteca
+    </a>
+
+    <div class="pagina-livro mt-3">
+
+        <!-- CAPA -->
+
+        <div class="text-center">
+
+            <img
+                id="capaLivro"
+                class="capa-detalhes"
+                src=""
+                alt="Capa do livro"
+            >
+
+        </div>
+
+
+        <!-- TÍTULO, AUTOR E GÊNERO -->
+
+        <div class="text-center">
+
+            <h2 id="tituloLivro" class="titulo-livro-detalhes"></h2>
+
+            <p id="autorLivro" class="autor-livro-detalhes"></p>
+
+            <span id="generoLivro" class="genero-livro"></span>
+
+        </div>
+
+
+        <!-- INFORMAÇÕES -->
+
+        <div class="informacoes-livro">
+
+            <p>
+                <strong>Disponibilidade:</strong>
+                <span id="disponibilidadeLivro"></span>
+            </p>
+
+            <p>
+                <strong>Ano de publicação:</strong>
+                <span id="anoLivro"></span>
+            </p>
+
+            <p>
+                <strong>ISBN:</strong>
+                <span id="isbnLivro"></span>
+            </p>
+
+        </div>
+
+
+        <!-- SINOPSE -->
+
+        <div class="secao-sinopse">
+
+            <h4>Sobre a obra</h4>
+
+            <p id="sinopseLivro" class="sinopse-livro"></p>
+
+        </div>
+
+
+        <!-- BOTÕES -->
+
+        <div class="row justify-content-center mt-4">
+
+            <div class="col-md-6">
+
+                <div class="d-grid gap-3">
+
+                    <button
+                        id="botaoEmprestar"
+                        class="btn btn-emprestar"
+                        disabled
+                        title="Empréstimos ainda não estão disponíveis"
+                    >
+                        📖 Emprestar
+                    </button>
+
+                    <button
+                        id="botaoFavoritar"
+                        class="btn btn-outline-danger btn-favorito-detalhes"
+                    >
+                        ♡ Adicionar aos favoritos
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // RECUPERA O LIVRO SELECIONADO
+
+    const livro = JSON.parse(
+        sessionStorage.getItem("livroSelecionado") || "null"
+    );
+
+
+    // SE NÃO EXISTIR LIVRO, VOLTA PARA A HOME
+
+    if (!livro) {
+
+        window.location.href = "{% url 'home' %}";
+
+    } else {
+
+        // TÍTULO
+
+        document.getElementById("tituloLivro").textContent =
+            livro.titulo || "Título não informado";
+
+
+        // AUTOR
+
+        document.getElementById("autorLivro").textContent =
+            livro.autor || "Autor não informado";
+
+
+        // GÊNERO
+
+        document.getElementById("generoLivro").textContent =
+            livro.genero || "Gênero não informado";
+
+
+        // SINOPSE
+
+        document.getElementById("sinopseLivro").textContent =
+            livro.sinopse || "Sinopse não disponível.";
+
+
+        // ANO
+
+        document.getElementById("anoLivro").textContent =
+            livro.ano || "Não informado";
+
+
+        // ISBN
+
+        document.getElementById("isbnLivro").textContent =
+            livro.isbn || "Não informado";
+
+
+        // DISPONIBILIDADE
+
+        const disponibilidade = document.getElementById(
+            "disponibilidadeLivro"
+        );
+
+        if (livro.disponivel) {
+
+            disponibilidade.textContent = "Disponível";
+            disponibilidade.style.color = "#198754";
+
+        } else {
+
+            disponibilidade.textContent = "Indisponível";
+            disponibilidade.style.color = "#dc3545";
+
+        }
+
+
+        // CAPA
+
+        const capa = document.getElementById("capaLivro");
+
+        if (livro.capa) {
+
+            capa.src = livro.capa;
+
+        } else if (livro.isbn) {
+
+            capa.src =
+                `https://covers.openlibrary.org/b/isbn/${livro.isbn}-L.jpg`;
+
+        } else {
+
+            capa.src =
+                "https://placehold.co/300x450/e8f1eb/286b58?text=Livro";
+
+        }
+
+        capa.onerror = function() {
+
+            this.onerror = null;
+
+            this.src =
+                "https://placehold.co/300x450/e8f1eb/286b58?text=Livro";
+
+        };
+
+
+        // FAVORITOS
+
+        const matricula = "{{ matricula|escapejs }}";
+
+        const chaveFavoritos =
+            "biblioteca_favoritos_" + matricula;
+
+        const botaoFavoritar =
+            document.getElementById("botaoFavoritar");
+
+
+        // CARREGAR FAVORITOS
+
+        function carregarFavoritos() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(chaveFavoritos)
+                ) || [];
+
+            } catch (erro) {
+
+                return [];
+
+            }
+
+        }
+
+
+        // VERIFICAR SE O LIVRO ESTÁ FAVORITADO
+
+        function livroFavoritado() {
+
+            return carregarFavoritos().some(
+                item => String(item.id) === String(livro.id)
+            );
+
+        }
+
+
+        // ATUALIZAR BOTÃO
+
+        function atualizarBotaoFavorito() {
+
+            const favoritado = livroFavoritado();
+
+            if (favoritado) {
+
+                botaoFavoritar.innerHTML =
+                    "♥ Remover dos favoritos";
+
+                botaoFavoritar.classList.add("favoritado");
+
+            } else {
+
+                botaoFavoritar.innerHTML =
+                    "♡ Adicionar aos favoritos";
+
+                botaoFavoritar.classList.remove("favoritado");
+
+            }
+
+        }
+
+
+        // ADICIONAR OU REMOVER FAVORITO
+
+        botaoFavoritar.addEventListener("click", function() {
+
+            let favoritos = carregarFavoritos();
+
+            const existe = favoritos.some(
+                item => String(item.id) === String(livro.id)
+            );
+
+            if (existe) {
+
+                favoritos = favoritos.filter(
+                    item => String(item.id) !== String(livro.id)
+                );
+
+            } else {
+
+                favoritos.push({
+                    id: livro.id,
+                    titulo: livro.titulo,
+                    autor: livro.autor,
+                    genero: livro.genero
+                });
+
+            }
+
+            localStorage.setItem(
+                chaveFavoritos,
+                JSON.stringify(favoritos)
+            );
+
+            atualizarBotaoFavorito();
+
+        });
+
+
+        atualizarBotaoFavorito();
+
+    }
+
+</script>
+
+{% endblock %}

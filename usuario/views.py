@@ -6,7 +6,10 @@ from functools import wraps
 from .forms import LoginForm
 
 
-# Verifica se o aluno já informou uma matrícula válida
+# ==========================================
+# VERIFICAR SE O ALUNO ESTÁ LOGADO
+# ==========================================
+
 def matricula_required(view_func):
 
     @wraps(view_func)
@@ -20,10 +23,12 @@ def matricula_required(view_func):
     return wrapper
 
 
-# Tela de login
+# ==========================================
+# LOGIN
+# ==========================================
+
 def login_view(request):
 
-    # Se já estiver na sessão, vai direto para a biblioteca
     if request.session.get('matricula'):
         return redirect('home')
 
@@ -35,7 +40,6 @@ def login_view(request):
 
             matricula = form.cleaned_data['matricula']
 
-            # Guarda a matrícula na sessão
             request.session['matricula'] = matricula
 
             messages.success(
@@ -63,7 +67,10 @@ def login_view(request):
     )
 
 
-# Sair da biblioteca
+# ==========================================
+# LOGOUT
+# ==========================================
+
 def logout_view(request):
 
     request.session.flush()
@@ -71,7 +78,10 @@ def logout_view(request):
     return redirect('login')
 
 
-# Página principal da biblioteca
+# ==========================================
+# HOME
+# ==========================================
+
 @matricula_required
 def home(request):
 
@@ -83,43 +93,70 @@ def home(request):
         {'matricula': matricula}
     )
 
-# Página de agendamento
+
+# ==========================================
+# AGENDAMENTO
+# ==========================================
+
 @matricula_required
 def agendar(request):
+
+    matricula = request.session.get('matricula')
 
     return render(
         request,
         'agendar.html',
-        {
-            'matricula': request.session.get('matricula')
-        }
+        {'matricula': matricula}
     )
 
 
-# Página de favoritos
+# ==========================================
+# FAVORITOS
+# ==========================================
+
 @matricula_required
 def favoritos(request):
+
+    matricula = request.session.get('matricula')
 
     return render(
         request,
         'favoritos.html',
-        {
-            'matricula': request.session.get('matricula')
-        }
+        {'matricula': matricula}
     )
 
 
+# ==========================================
+# PERFIL
+# ==========================================
 
-# Perfil do aluno
-# Perfil do aluno
 @matricula_required
 def perfil(request):
+
+    matricula = request.session.get('matricula')
+
+    dados = {
+        'matricula': matricula,
+    }
 
     return render(
         request,
         'perfil.html',
-        {
-            'matricula': request.session.get('matricula')
-        }
+        dados
     )
 
+
+# ==========================================
+# DETALHES DO LIVRO
+# ==========================================
+
+@matricula_required
+def livro_detalhes(request):
+
+    matricula = request.session.get('matricula')
+
+    return render(
+        request,
+        'livro_detalhes.html',
+        {'matricula': matricula}
+    )
