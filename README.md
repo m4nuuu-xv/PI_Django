@@ -28,7 +28,7 @@ Está sendo usado com as linguagem de programação; HTML, Django, CSS e Banco d
   - Instalação e execução:
 
 Com o VS code aberto e o link do repositório do GitHub copiado, digite o seguinte comando no terminal "git clone LINK_DO_REPOSITORIO", feito isso, entre na pasta do projeto "cd NOME_DA_PASTA", ative o ambiente virtual "venv\Scripts\activate",
-pos isso, use o comando "pip install -r requirements.txt", esse comando vai ler o arquivo e instalar todas as dependências listadas nele, incluindo o Django. Com todas as dependências instaladas e o ambiente virtual ativado, no terminal digite "python manage.py runserver",
+depois disso, use o comando "pip install -r requirements.txt", esse comando vai ler o arquivo e instalar todas as dependências listadas nele, incluindo o Django. Com todas as dependências instaladas e o ambiente virtual ativado, no terminal digite "python manage.py runserver",
 aguarde até que o Django inicie o servidor, quando aparecer uma mensagem indicando que o servidor está rodando, significa que o projeto está pronto para ser acessado então abra o navegador e digite o seguinte endereço "http://localhost:8000/", a tendencia é que se tudo ocorrer bem
 apareça a tela inicial do projeto.
 
