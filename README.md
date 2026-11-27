@@ -27,10 +27,10 @@ Está sendo usado com as linguagem de programação; HTML, Django, CSS e Banco d
 
   - Instalação e execução:
 
-Com o VS code aberto e o link do repositório do GitHub copiado, digite o seguinte comando no terminal "git clone LINK_DO_REPOSITORIO", feito isso, entre na pasta do projeto "cd NOME_DA_PASTA", ative o ambiente virtual "venv\Scripts\activate",
-depois disso, use o comando "pip install -r requirements.txt", esse comando vai ler o arquivo e instalar todas as dependências listadas nele, incluindo o Django. Com todas as dependências instaladas e o ambiente virtual ativado, no terminal digite "python manage.py runserver",
-aguarde até que o Django inicie o servidor, quando aparecer uma mensagem indicando que o servidor está rodando, significa que o projeto está pronto para ser acessado então abra o navegador e digite o seguinte endereço "http://localhost:8000/", a tendencia é que se tudo ocorrer bem
-apareça a tela inicial do projeto.
+Com o VS Code aberto e o link do repositório do GitHub copiado, abra o terminal e digite `git clone LINK_DO_REPOSITORIO`, substituindo o texto pelo link do repositório. Após clonar o projeto, entre na pasta criada utilizando o comando `cd NOME_DA_PASTA`.
+Em seguida, crie o ambiente virtual com o comando `python -m venv venv` e ative-o utilizando `venv\Scripts\activate`. Com o ambiente virtual ativado, instale as dependências do projeto através do comando `pip install -r requirements.txt`, que irá ler o arquivo e instalar todas as bibliotecas necessárias, incluindo o Django.
+Após a instalação, digite `python manage.py runserver` no terminal e aguarde até que o Django inicie o servidor. Quando aparecer a mensagem indicando que o servidor está rodando, o projeto estará pronto para ser acessado.
+Por fim, abra o navegador e digite o endereço `http://localhost:8000/`. Se todas as etapas forem realizadas corretamente, a tela inicial do projeto será exibida, indicando que a aplicação está funcionando localmente.
 
   - Discentes
 Manuele Pietra Alves Da Silva e Thalis Felipe Veras Da Silva
